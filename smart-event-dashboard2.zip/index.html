@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EventPulse | Smart Event & Ticket Management</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top border-bottom border-secondary">
+        <div class="container-fluid px-4">
+            <a class="navbar-brand fw-bold text-primary" href="#"><i class="bi bi-ticket-perforated-fill me-2"></i>EventPulse</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link active" href="#" id="navExplore">Explore Events</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#" id="navMyTickets">My Tickets <span class="badge bg-primary rounded-pill" id="myTicketsCount">0</span></a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <button class="btn btn-outline-light position-relative" data-bs-toggle="modal" data-bs-target="#cartModal">
+                        <i class="bi bi-cart3"></i> Cart
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="container-fluid px-4 py-4">
+        
+        <!-- SEARCH & FILTER HEADER -->
+        <div class="row g-3 align-items-center mb-4">
+            <div class="col-md-4">
+                <div class="input-group">
+                    <span class="input-group-text bg-secondary text-white"><i class="bi bi-search"></i></span>
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search events by title or location...">
+                </div>
+            </div>
+            <div class="col-md-2">
+                <select id="genreFilter" class="form-select">
+                    <option value="ALL">All Categories</option>
+                    <option value="Music">Music</option>
+                    <option value="Tech">Technology</option>
+                    <option value="Sports">Sports</option>
+                    <option value="Arts">Arts & Theatre</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select id="locationFilter" class="form-select">
+                    <option value="ALL">All Locations</option>
+                    <option value="New York">New York</option>
+                    <option value="San Francisco">San Francisco</option>
+                    <option value="Chicago">Chicago</option>
+                    <option value="Austin">Austin</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="date" id="dateFilter" class="form-control">
+            </div>
+            <div class="col-md-2 d-flex justify-content-end gap-2">
+                <button class="btn btn-outline-secondary active" id="viewGridBtn" title="Grid View"><i class="bi bi-grid-fill"></i></button>
+                <button class="btn btn-outline-secondary" id="viewListBtn" title="List View"><i class="bi bi-list-ul"></i></button>
+            </div>
+        </div>
+
+        <!-- EVENT LISTINGS CONTAINER -->
+        <div id="eventContainer" class="row g-4">
+            <!-- Dynamic Event Cards rendered via JavaScript -->
+        </div>
+
+    </main>
+
+    <!-- CART MODAL -->
+    <div class="modal fade" id="cartModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"><i class="bi bi-cart-check me-2"></i> Your Ticket Cart</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="cartItemsList">
+                    <!-- Cart Items dynamically rendered -->
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div>
+                        <input type="text" id="promoCodeInput" class="form-control form-control-sm d-inline-block w-auto" placeholder="Promo Code (e.g. EARLYBIRD)">
+                        <button class="btn btn-sm btn-outline-info" id="applyPromoBtn">Apply</button>
+                    </div>
+                    <div>
+                        <span class="me-3 fs-5">Total: <strong id="cartTotalDisplay">$0.00</strong></span>
+                        <button class="btn btn-success" id="checkoutBtn"><i class="bi bi-credit-card me-1"></i> Checkout Pass</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TICKET CONFIRMATION & QR MODAL -->
+    <div class="modal fade" id="ticketModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title"><i class="bi bi-qr-code-scan me-2"></i> Booked Passes & QR Code Confirmation</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <!-- VIEW TOGGLE: SINGLE VS MULTIPLE ADMISSION -->
+                    <div class="d-flex justify-content-center mb-4">
+                        <div class="btn-group" role="group">
+                            <input type="radio" class="btn-check" name="passViewType" id="singlePassView" checked>
+                            <label class="btn btn-outline-primary" for="singlePassView">Single Tickets (Individual QRs)</label>
+
+                            <input type="radio" class="btn-check" name="passViewType" id="groupPassView">
+                            <label class="btn btn-outline-primary" for="groupPassView">Multiple/Group Pass (Consolidated QR)</label>
+                        </div>
+                    </div>
+
+                    <div id="ticketsDisplayContainer" class="row g-3">
+                        <!-- Dynamic Pass Cards rendered here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="window.print()"><i class="bi bi-printer me-1"></i> Print Tickets</button>
+                    <button class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS & Dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- QRCode.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    
+    <!-- Application Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
